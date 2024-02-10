@@ -1,13 +1,19 @@
-
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Navigation } from "./Components/Navigation/Navigation";
 
 function App() {
-
-
   return (
     <>
-     <div className='bg-slate-500'>Hi</div> 
+      <BrowserRouter>
+      <Routes>
+       <Route index element={<Navigation/>} >
+
+
+       </Route>
+       </Routes>
+      </BrowserRouter>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

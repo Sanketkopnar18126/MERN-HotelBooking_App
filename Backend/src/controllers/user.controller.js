@@ -4,7 +4,15 @@ import { User } from "../models/user.models.js";
 import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { asynchHandler } from "../utils/asynchHandler.js";
-
+// generate Access And Refresh Token
+const generateAcessAndRefreshToken = async (userId) => {
+  const user = await User.findById(userId);
+  const acessToken = await user.generateAcessToken();
+  const refreshToken = await user.generateRefreshToken();
+  user.refreshToken = refreshToken;
+  await user.save({ validateBeforeSave: false });
+  return { acessToken, refreshToken };
+};
 const registerUser = asynchHandler(async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
   //   console.log("reqbdy", req.body);
@@ -47,4 +55,49 @@ const registerUser = asynchHandler(async (req, res) => {
     );
 });
 
-export { registerUser };
+// login user
+const logInUser = asynchHandler(async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({
+    email: email,
+  });
+  console.log("user", user);
+  if (!user) {
+    throw new apiError(404, "User does not exist");
+  }
+  const checkPassword = await user.isPasswordCorrect(password);
+  console.log("checkPassword", checkPassword);
+  if (!checkPassword) {
+    throw new apiError(404, "Incorrect Password");
+  }
+  const { acessToken, refreshToken } = await generateAcessAndRefreshToken(
+    user?._id
+  );
+
+  const logedIn = await User.findById(user?._id).select(
+    "-password -refreshToken"
+  );
+  console.log("LogedIn", logedIn);
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .cookie("acessToken", acessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new apiResponse(
+        200,
+        { user: logedIn, acessToken, refreshToken },
+        "User sucessfully login"
+      )
+    );
+});
+
+// LogOut User
+
+const logOut = asynchHandler(async (req, res) => {});
+export { registerUser, logInUser, logOut };

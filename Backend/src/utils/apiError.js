@@ -6,7 +6,7 @@ class apiError extends Error {
     stack = ""
   ) {
     super(mssg);
-    (this.statuscode = statuscode((this.data = null))),
+    (this.statuscode = statuscode),
       (this.mssg = mssg),
       (this.success = false),
       (this.errors = errors);
@@ -18,3 +18,5 @@ class apiError extends Error {
     }
   }
 }
+
+export { apiError };

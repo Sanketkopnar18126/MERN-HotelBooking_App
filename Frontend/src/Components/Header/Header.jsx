@@ -2,14 +2,24 @@ import { Link, NavLink } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Profile } from "../Profile/Profile";
 export const Header = () => {
   const [userData, setuserData] = useState(null);
+  const [showdropProfile, setshowdropProfile] = useState(false);
 
   const { currentUser } = useSelector((state) => state.userdata);
   useEffect(() => {
     setuserData(currentUser);
-  }, []);
-  console.log("data", userData);
+  }, [currentUser]);
+
+  const onHndleShowPofile=()=>{
+    setshowdropProfile(!showdropProfile)
+  }
+  // const onHandleHideProfile =()=>{
+  //   setshowdropProfile(false)
+  // }
+  // console.log("data in header", userData);
+  // console.log("currentUser in header",currentUser)
   return (
     <>
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -28,9 +38,11 @@ export const Header = () => {
             </Link>
           </a>
 
-          {currentUser && (
+          {currentUser?.data?.user? (
             <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
               <button
+              onClick={onHndleShowPofile}
+              // onMouseLeave={onHandleHideProfile }
                 type="button"
                 className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                 id="user-menu-button"
@@ -40,8 +52,11 @@ export const Header = () => {
               >
                 <img className="w-8 h-8 rounded-full" alt="user photo" />
               </button>
+              {showdropProfile && <Profile />}
             </div>
-          )}
+          ):null}
+
+
 
           <div className="bg-white flex h-[43px] rounded-[20px] p-[11px]">
             <input
@@ -77,7 +92,7 @@ export const Header = () => {
                 </NavLink>
               </li>
 
-              {currentUser ? null : (
+              {currentUser?.data?.user?null: (
                 <li>
                   <NavLink
                     to={"/signin"}

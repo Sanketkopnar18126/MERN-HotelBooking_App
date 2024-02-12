@@ -40,7 +40,7 @@ const User = createSlice({
     },
 
     signOutSuccess: (state, action) => {
-      state.loading = action.payload;
+      state.currentUser = action.payload;
       state.loading = false;
     },
 

@@ -7,6 +7,8 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { AddHotel } from "./Pages/AddHotel/AddHotel.jsx";
+import { MyHotels } from "./Pages/MyHotels/MyHotels.jsx";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
             <Route path="/" element={<Navigation />}>
               <Route path="/signup" element={<SignUp />} />
               <Route path="/signin" element={<SignIn />} />
+              <Route path="/add-hotel" element={<AddHotel/>}/>
+              <Route path="/myhotels" element={<MyHotels/>}/>
             </Route>
           </Routes>
         </BrowserRouter>

@@ -52,6 +52,11 @@ const hotelSchema = new Schema(
         required: true,
       },
     ],
+
+    userRef: {
+      type: String,
+      required: true,
+    },
     // lastUpdated: {
     //   type: Date,
     //   required: true,

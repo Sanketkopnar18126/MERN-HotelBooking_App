@@ -9,12 +9,12 @@ cloudinary.config({
 // console.log("CLOUDINARY_API_KEY:", process.env.CLOUDINARY_API_KEY);
 // console.log("SECRETE_KEY:", process.env.SECRETE_KEY);
 
-console.log("cloudinary config", cloudinary.config());
+// console.log("cloudinary config", cloudinary.config());
 
 const uploadOnCloudinary = async (localFilePath) => {
   try {
     if (!localFilePath) return null;
-
+    console.log("localpath incloudinary", localFilePath);
     const response = await cloudinary.uploader.upload(localFilePath, {
       resource_type: "auto",
     });

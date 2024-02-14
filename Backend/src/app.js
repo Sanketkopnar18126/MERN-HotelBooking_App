@@ -30,5 +30,5 @@ import userRouter from "./routes/user.routes.js";
 import hotelRoutes from "./routes/hotel.routes.js";
 
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/hotels", hotelRoutes);
+app.use("/api/v1/users/hotels", hotelRoutes);
 export { app };

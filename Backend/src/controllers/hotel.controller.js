@@ -16,8 +16,9 @@ const createHotelForm = asynchHandler(async (req, res) => {
     starRating,
     type,
     pricePerNight,
+    userRef,
   } = req.body;
-  console.log("reqFiles", req?.files);
+  // console.log("reqFiles", req?.files);
   let imageUrl;
   if (
     req.files &&
@@ -25,7 +26,7 @@ const createHotelForm = asynchHandler(async (req, res) => {
     req.files.imageUrls.length > 0
   ) {
     imageUrl = await req.files.imageUrls[0]?.path;
-    console.log("imageUrls", imageUrl);
+    // console.log("imageUrls", imageUrl);
   }
 
   if (!imageUrl) {
@@ -33,7 +34,7 @@ const createHotelForm = asynchHandler(async (req, res) => {
   }
 
   const imageUrls = await uploadOnCloudinary(imageUrl);
-  console.log("imgurls", imageUrls);
+  // console.log("imgurls", imageUrls);
 
   if (!imageUrls) {
     throw new apiError(400, "imageUrls file is required");
@@ -45,11 +46,12 @@ const createHotelForm = asynchHandler(async (req, res) => {
     description,
     adultCount,
     childCount,
-    imageUrls: [imageUrl || ""],
+    imageUrls: imageUrls?.url || "",
     facilities,
     starRating,
     type,
     pricePerNight,
+    userRef,
   });
 
   console.log("hotelData", hotelData);

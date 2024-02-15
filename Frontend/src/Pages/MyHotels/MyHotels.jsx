@@ -6,11 +6,14 @@ import { BiHotel, BiMoney, BiStar } from "react-icons/bi";
 export const MyHotels = () => {
   const [hotelData, sethotelData] = useState();
 
+  const [loading,setloading]=useState(false)
+
   const { currentUser } = useSelector((state) => state.userdata);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setloading(true)
         const res = await fetch(
           `/users/get_hotels/${currentUser?.data?.user?._id}`
         );
@@ -18,9 +21,11 @@ export const MyHotels = () => {
           const data = await res.json();
           console.log(data);
           sethotelData(data);
+          setloading(false)
         }
       } catch (error) {
         console.log("error at fetching userHotelData in react ui", error);
+        setloading(false)
       }
     };
     fetchData();
@@ -79,6 +84,8 @@ export const MyHotels = () => {
           </div>
         ))}
         </div>
+        <p className="flex justify-center absolute left-[684px] top-[206px] text-[28px] text-blue-800">{loading?"loading.....":""}</p>
+
       </div>
     </>
   );

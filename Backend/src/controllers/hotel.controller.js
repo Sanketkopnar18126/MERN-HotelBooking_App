@@ -54,7 +54,7 @@ const createHotelForm = asynchHandler(async (req, res) => {
     userRef,
   });
 
-  console.log("hotelData", hotelData);
+  // console.log("hotelData", hotelData);
   if (!hotelData) {
     throw new apiError(404, "Something went wrong");
   }

@@ -1,3 +1,4 @@
+import { Hotel } from "../models/hotel.models.js";
 import { User } from "../models/user.models.js";
 import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
@@ -129,4 +130,25 @@ const logOut = asynchHandler(async (req, res) => {
     .json(new apiResponse(200, {}, "User Successfully Logout.."));
 });
 
-export { registerUser, logInUser, logOut };
+// get Hotels created data
+const getHotelData = asynchHandler(async (req, res) => {
+  console.log("reqparam", req);
+  console.log("req?.user?._id ", req?.user?._id);
+  console.log(" req?.params?.id ", req?.params?.id);
+
+  try {
+    if (req?.user?._id == req?.params?.id) {
+      const user = await Hotel.find({ userRef: req?.params?.id });
+      console.log("userinHotel", user);
+      return res
+        .status(200)
+        .json(new apiResponse(200, user, "Successfully user get"));
+    } else {
+      throw new apiError(404, "User does not exist");
+    }
+  } catch (error) {
+    console.log("error occur at get HotelData inUserController", error);
+  }
+});
+
+export { registerUser, logInUser, logOut, getHotelData };

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createHotelForm,
+  searchHotelByUser,
   updateHotelForm,
 } from "../controllers/hotel.controller.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
@@ -19,7 +20,7 @@ router.route("/create").post(
   createHotelForm
 );
 
-router.route("/update/:id").post(
+router.route("/update_data/:id").post(
   verifyJWT,
   upload.fields([
     {
@@ -29,4 +30,6 @@ router.route("/update/:id").post(
   ]),
   updateHotelForm
 );
+
+router.route("/get").get(searchHotelByUser);
 export default router;

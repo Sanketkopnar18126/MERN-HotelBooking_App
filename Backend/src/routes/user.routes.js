@@ -14,4 +14,5 @@ router.route("/logout").post(verifyJWT, logOut);
 
 // request for getting user created hotel
 router.route("/get_hotels/:id").get(verifyJWT, getHotelData);
+
 export default router;

@@ -69,21 +69,97 @@ const createHotelForm = asynchHandler(async (req, res) => {
 
 const updateHotelForm = asynchHandler(async (req, res) => {
   try {
-    const hotelData = await Hotel.findByIdAndUpdate(req?.params?.id, req.body, {
-      new: true,
-    });
-    console.log("hotelData", hotelData);
+    const hotelData = await Hotel.findById(req.params.id);
 
     if (!hotelData) {
-      throw new apiError(404, "user does not exist Unable to update data...");
+      throw new apiError(404, "data does not found");
+    }
+
+    const updatedHotelData = await Hotel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+
+    if (!updatedHotelData) {
+      throw new apiError(404, "Update data form does not exist...");
     }
 
     return res
       .status(200)
-      .json(new apiResponse(200, hotelData, "Successfully data updated...!"));
+      .json(
+        new apiResponse(200, updatedHotelData, "Successfully data updated...!")
+      );
   } catch (error) {
     console.log("error at updating hotelform", error);
+    // Handle other errors or log them as needed
+    return res.status(500).json(new apiError(500, "Internal server error"));
   }
 });
 
-export { createHotelForm, updateHotelForm };
+// Search functionality
+
+const searchHotelByUser = asynchHandler(async (req, res) => {
+  try {
+    console.log("req", req);
+    const limit = parseInt(req.query.limit) || 9;
+    const startIndex = parseInt(req.query.startIndex) || 0;
+
+    let type = req.query.type || [
+      "Budget",
+      "Boutique",
+      "Luxury",
+      "Ski Resort",
+      "Business",
+      "Family",
+      "Romantic",
+      "Hiking Resort",
+      "Cabin",
+      "Beach Resort",
+      "Golf Resort",
+      "Motel",
+      "All Inclusive",
+      "Pet Friendly",
+      "Self Catering",
+    ];
+
+    const searchTerm = req.query.searchTerm || "";
+    const sort = req.query.sort || "createdAt";
+    const order = req.query.order || "desc";
+
+    let facilities = req.query.facilities || [
+      "Free WiFi",
+      "Parking",
+      "Airport Shuttle",
+      "Family Rooms",
+      "Non-Smoking Rooms",
+      "Outdoor Pool",
+      "Spa",
+      "Fitness Center",
+    ];
+
+    const hotels = await Hotel.find({
+      $or: [
+        {
+          country: { $regex: searchTerm, $options: "i" },
+        },
+        { city: { $regex: searchTerm, $options: "i" } },
+      ],
+      type: { $in: type },
+      facilities: { $in: facilities },
+    })
+      .sort({ [sort]: order })
+      .limit(limit)
+      .skip(startIndex);
+    console.log("Hotels", hotels);
+    return res
+      .status(200)
+      .json(new apiResponse(200, hotels, "Successfully hotels get"));
+  } catch (error) {
+    console.log("Error occur at search hotel functionality", error);
+  }
+});
+
+export { createHotelForm, updateHotelForm, searchHotelByUser };

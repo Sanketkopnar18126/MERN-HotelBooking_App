@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AddHotel } from "./Pages/AddHotel/AddHotel.jsx";
 import { MyHotels } from "./Pages/MyHotels/MyHotels.jsx";
+import { Search } from "./Pages/Search/Search.jsx";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
               <Route path="/signin" element={<SignIn />} />
               <Route path="/add-hotel" element={<AddHotel/>}/>
               <Route path="/myhotels" element={<MyHotels/>}/>
+              <Route path="/search" element={<Search/>}/>
             </Route>
           </Routes>
         </BrowserRouter>

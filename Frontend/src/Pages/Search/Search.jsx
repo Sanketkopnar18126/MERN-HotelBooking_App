@@ -13,7 +13,7 @@ export const Search = () => {
     sort: "createdAt",
     order: "desc",
   });
-
+// const navigate=useNavigate()
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm");
@@ -43,9 +43,9 @@ export const Search = () => {
       setShowMore(false);
       const searchQuery = urlParams.toString();
       const res = await fetch(`/users/hotels/get?${searchQuery}`);
-      console.log("res", res);
+      // console.log("res", res);
       const data = await res.json();
-      console.log("data in searchFun", data);
+      // console.log("data in searchFun", data);
 
       if (data.length > 8) {
         setShowMore(true);
@@ -58,12 +58,23 @@ export const Search = () => {
     fetchHotels();
   }, [location.search]);
 
-  const handleSubmit = () => {};
+//   const handleSubmit = (e) => {
+// e.preventDefault()
+// const urlParams=new URLSearchParams()
+// urlParams.set('searchTerm', sidebardata.searchTerm)
+// urlParams.set('order', sidebardata.order)
+// urlParams.set('sort', sidebardata.sort)
+// urlParams.set('facilities', sidebardata.facilities)
+// urlParams.set('type', sidebardata.type)
+// const searchQuery = urlParams.toString();
+// navigate(`/search?${searchQuery}`)
+
+//   };
   return (
     <>
       <div className="flex flex-col md:flex-row">
         <div className="p-7  border-b-2 md:border-r-2 md:min-h-screen">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-8 w-[444px]">
+          <form  className="flex flex-col gap-8 w-[444px]">
             <div className="flex items-center gap-2">
               <label className="whitespace-nowrap font-semibold">Filter:</label>
             </div>

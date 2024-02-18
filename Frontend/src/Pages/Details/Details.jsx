@@ -37,10 +37,14 @@ export const Details = () => {
     };
     fetchData();
   }, []);
+
+  const onHandleBookNow=()=>{
+
+  }
   console.log("data", data);
   return (
     <>
-      <div className="space-y-6">
+      <div className="flex justify-center items-center flex-col gap-3">
         {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
         <div>
           <span className="flex">
@@ -157,7 +161,7 @@ export const Details = () => {
                     </label>
                   </div>
                   {currentUser?.data?.user ? (
-                    <button className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl">
+                    <button onClick={onHandleBookNow} className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl">
                       Book Now
                     </button>
                   ) : (

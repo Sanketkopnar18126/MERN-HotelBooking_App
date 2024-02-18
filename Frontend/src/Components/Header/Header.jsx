@@ -7,6 +7,7 @@ export const Header = () => {
   const [userData, setuserData] = useState(null);
   const [showdropProfile, setshowdropProfile] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate=useNavigate()
 
   const { currentUser } = useSelector((state) => state.userdata);
 
@@ -22,7 +23,7 @@ export const Header = () => {
   // }
   // console.log("data in header", userData);
   // console.log("currentUser in header",currentUser)
-const navigate=useNavigate()
+// const navigate=useNavigate()
 
   const onHandleSubmitSerch = (e) => {
     e.preventDefault();
@@ -83,6 +84,8 @@ const navigate=useNavigate()
               onClick={onHandleSubmitSerch}
               type="text"
               placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="bg-transparent focus:outline-none w-24 sm:w-64"
             />
             <button>

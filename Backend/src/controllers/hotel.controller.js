@@ -103,7 +103,7 @@ const updateHotelForm = asynchHandler(async (req, res) => {
 
 const searchHotelByUser = asynchHandler(async (req, res) => {
   try {
-    console.log("req", req);
+    // console.log("req", req);
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
 
@@ -153,7 +153,7 @@ const searchHotelByUser = asynchHandler(async (req, res) => {
       .sort({ [sort]: order })
       .limit(limit)
       .skip(startIndex);
-    console.log("Hotels", hotels);
+    // console.log("Hotels", hotels);
     return res
       .status(200)
       .json(new apiResponse(200, hotels, "Successfully hotels get"));
@@ -162,4 +162,26 @@ const searchHotelByUser = asynchHandler(async (req, res) => {
   }
 });
 
-export { createHotelForm, updateHotelForm, searchHotelByUser };
+// Get Particular Hotel when user click on viewMore Or in Hotel Name
+
+const getParticularHotel = asynchHandler(async (req, res) => {
+  try {
+    const hotel = await Hotel.findById(req.params.id);
+    if (!hotel) {
+      throw new apiError(404, "Hotel does not exist in db");
+    }
+
+    return res
+      .status(200)
+      .json(new apiResponse(200, hotel, "Succesfully hotel get it"));
+  } catch (error) {
+    console.log("error at give Particular Hotel", error);
+  }
+});
+
+export {
+  createHotelForm,
+  updateHotelForm,
+  searchHotelByUser,
+  getParticularHotel,
+};

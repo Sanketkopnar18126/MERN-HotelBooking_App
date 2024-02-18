@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createHotelForm,
+  getParticularHotel,
   searchHotelByUser,
   updateHotelForm,
 } from "../controllers/hotel.controller.js";
@@ -32,4 +33,6 @@ router.route("/update_data/:id").post(
 );
 
 router.route("/get").get(searchHotelByUser);
+
+router.route("/get_hotel/:id").get(getParticularHotel);
 export default router;

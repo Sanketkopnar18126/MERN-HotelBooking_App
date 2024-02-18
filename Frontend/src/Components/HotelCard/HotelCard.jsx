@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { MdLocationOn } from "react-icons/md";
 import { AiFillStar } from "react-icons/ai";
 export const HotelCard = ({ hotelData }) => {
   return (
@@ -46,7 +45,6 @@ export const HotelCard = ({ hotelData }) => {
    //    </Link>
    //  </div>
    <>
-   <div>data</div>
    {/* {console.log("hotelDataData",hotelDataData)} */}
       <div className="grid grid-cols-1 xl:grid-cols-[2fr_3fr] border border-slate-300 rounded-lg p-8 gap-8">
       <div className="w-full h-[300px]">
@@ -59,9 +57,9 @@ export const HotelCard = ({ hotelData }) => {
         <div>
           <div className="flex items-center">
             <span className="flex">
-              {/* {Array.from({ length: hotelData.starRating }).map((index) => (
+              {Array.from({ length: hotelData.starRating }).map(() => (
                 <AiFillStar className="fill-yellow-400" />
-              ))} */}
+              ))}
             </span>
             <span className="ml-1 text-sm">{hotelData.type}</span>
           </div>
@@ -92,7 +90,7 @@ export const HotelCard = ({ hotelData }) => {
           <div className="flex flex-col items-end gap-1">
             <span className="font-bold">£{hotelData.pricePerNight} per night</span>
             <Link
-              to={`/detail/${hotelData._id}`}
+              to={`/details/${hotelData._id}`}
               className="bg-blue-600 text-white h-full p-2 font-bold text-xl max-w-fit hover:bg-blue-500"
             >
               View More

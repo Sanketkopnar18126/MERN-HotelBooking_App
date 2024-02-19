@@ -7,10 +7,9 @@ export const Header = () => {
   const [userData, setuserData] = useState(null);
   const [showdropProfile, setshowdropProfile] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   const { currentUser } = useSelector((state) => state.userdata);
-
   useEffect(() => {
     setuserData(currentUser);
   }, [currentUser]);
@@ -23,7 +22,7 @@ export const Header = () => {
   // }
   // console.log("data in header", userData);
   // console.log("currentUser in header",currentUser)
-// const navigate=useNavigate()
+  // const navigate=useNavigate()
 
   const onHandleSubmitSerch = (e) => {
     e.preventDefault();
@@ -32,7 +31,6 @@ export const Header = () => {
 
     const searchQuery = urlParms.toString();
     navigate(`/search?${searchQuery}`);
-
   };
 
   useEffect(() => {

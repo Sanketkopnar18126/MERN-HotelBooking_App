@@ -130,6 +130,16 @@ const logOut = asynchHandler(async (req, res) => {
     .json(new apiResponse(200, {}, "User Successfully Logout.."));
 });
 
+const getUser = asynchHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    throw new apiError(404, "User Does Not Exist at get user");
+  }
+  // console.log("User", user);
+  return res
+    .status(200)
+    .json(new apiResponse(200, user, "Successfully get user"));
+});
 // get Hotels created data
 const getHotelData = asynchHandler(async (req, res) => {
   console.log("reqparam", req);
@@ -151,4 +161,4 @@ const getHotelData = asynchHandler(async (req, res) => {
   }
 });
 
-export { registerUser, logInUser, logOut, getHotelData };
+export { registerUser, logInUser, logOut, getHotelData, getUser };

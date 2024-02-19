@@ -1,6 +1,7 @@
 import Router from "express";
 import {
   getHotelData,
+  getUser,
   logInUser,
   logOut,
   registerUser,
@@ -11,6 +12,9 @@ const router = Router();
 router.route("/register").post(registerUser);
 router.route("/login").post(logInUser);
 router.route("/logout").post(verifyJWT, logOut);
+
+//  get User
+router.route("/me/:id").get(getUser);
 
 // request for getting user created hotel
 router.route("/get_hotels/:id").get(verifyJWT, getHotelData);

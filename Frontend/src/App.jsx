@@ -11,6 +11,7 @@ import { AddHotel } from "./Pages/AddHotel/AddHotel.jsx";
 import { MyHotels } from "./Pages/MyHotels/MyHotels.jsx";
 import { Search } from "./Pages/Search/Search.jsx";
 import { Details } from "./Pages/Details/Details.jsx";
+import { Booking } from "./Pages/Booking/Booking.jsx";
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
               <Route path="/myhotels" element={<MyHotels/>}/>
               <Route path="/search" element={<Search/>}/>
               <Route path="/details/:id" element={<Details/>}/>
+              <Route path="/booking_form/:id" element={<Booking/>}/>
+
 
             </Route>
           </Routes>

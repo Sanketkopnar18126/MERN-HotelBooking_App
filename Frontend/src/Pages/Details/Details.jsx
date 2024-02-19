@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AiFillStar } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setData } from "../../Slice/hotel.slice.js";
 export const Details = () => {
   const [loading, setloading] = useState(false);
   const [data, setdata] = useState();
@@ -11,15 +12,20 @@ export const Details = () => {
     checkOut: "",
     adultCount: "",
     childCount: "",
+    price: "",
+    location: "",
+    country: "",
   });
 
   const { currentUser } = useSelector((state) => state.userdata);
-  console.log("currentUser", currentUser);
+  // console.log("currentUser", currentUser);
 
   const minDate = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
   const maxDate = new Date();
   maxDate.setFullYear(maxDate.getFullYear() + 1);
+
   const params = useParams();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -28,6 +34,7 @@ export const Details = () => {
         if (res.ok) {
           const data = await res.json();
           setdata(data);
+          // console.log("data", data);
           setloading(false);
         }
       } catch (error) {
@@ -37,11 +44,22 @@ export const Details = () => {
     };
     fetchData();
   }, []);
+  const dispatch = useDispatch();
 
-  const onHandleBookNow=()=>{
-
-  }
-  console.log("data", data);
+  const onHandleBookNow = () => {
+    const payload = {
+      ...bookinForm,
+      price: data?.data?.pricePerNight,
+      childCount: data?.data?.childCount,
+      adultCount: data?.data?.adultCount,
+      city: data?.data?.city,
+      country: data?.data?.country,
+    };
+    console.log("Dispatching payload:", payload);
+    dispatch(setData(payload));
+  };
+  // console.log("data", data);
+  // console.log("bookingForm",bookinForm)
   return (
     <>
       <div className="flex justify-center items-center flex-col gap-3">
@@ -85,93 +103,101 @@ export const Details = () => {
               </h3>
 
               {/* onSubmit={isLoggedIn ? onSubmit : onSignInClick} */}
-                <div className="grid grid-cols-1 gap-4 items-center">
-                  <div>
-                    <label htmlFor="checkIn" className="sr-only">
-                      Check-in Date:
-                    </label>
+              <div className="grid grid-cols-1 gap-4 items-center">
+                <div>
+                  <label htmlFor="checkIn" className="sr-only">
+                    Check-in Date:
+                  </label>
+                  <input
+                    type="date"
+                    id="checkIn"
+                    required
+                    value={bookinForm.checkIn}
+                    onChange={(e) =>
+                      setbookingForm({
+                        ...bookinForm,
+                        checkIn: e.target.value,
+                      })
+                    }
+                    min={minDate}
+                    max={maxDate.toISOString().split("T")[0]}
+                    className="min-w-full bg-white p-2 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="checkOut" className="sr-only">
+                    Check-out Date:
+                  </label>
+                  <input
+                    type="date"
+                    id="checkOut"
+                    required
+                    value={bookinForm.checkOut}
+                    onChange={(e) =>
+                      setbookingForm({
+                        ...bookinForm,
+                        checkOut: e.target.value,
+                      })
+                    }
+                    min={bookinForm.checkIn}
+                    max={maxDate.toISOString().split("T")[0]}
+                    className="min-w-full bg-white p-2 focus:outline-none"
+                  />
+                </div>
+                <div className="flex bg-white px-2 py-1 gap-2">
+                  <label className="items-center flex">
+                    Adults:
                     <input
-                      type="date"
-                      id="checkIn"
-                      required
-                      value={bookinForm.checkIn}
-                      onChange={(e) =>
-                        setbookingForm({
-                          ...bookinForm,
-                          checkIn: e.target.value,
-                        })
-                      }
-                      min={minDate}
-                      max={maxDate.toISOString().split("T")[0]}
-                      className="min-w-full bg-white p-2 focus:outline-none"
+                      className="w-full p-1 focus:outline-none font-bold"
+                      type="number"
+                      min={1}
+                      max={20}
+                      value={data?.data?.adultCount}
+                      // onChange={(e) =>
+                      //   setbookingForm({
+                      //     ...bookinForm,
+                      //     adultCount: e.target.value,
+                      //   })
+                      // }
                     />
-                  </div>
-                  <div>
-                    <label htmlFor="checkOut" className="sr-only">
-                      Check-out Date:
-                    </label>
+                  </label>
+                  <label className="items-center flex">
+                    Children:
                     <input
-                      type="date"
-                      id="checkOut"
-                      required
-                      value={bookinForm.checkOut}
-                      onChange={(e) =>
-                        setbookingForm({
-                          ...bookinForm,
-                          checkOut: e.target.value,
-                        })
-                      }
-                      min={bookinForm.checkIn}
-                      max={maxDate.toISOString().split("T")[0]}
-                      className="min-w-full bg-white p-2 focus:outline-none"
+                      className="w-full p-1 focus:outline-none font-bold"
+                      type="number"
+                      min={0}
+                      max={20}
+                      value={data?.data?.childCount}
+                      // onChange={(e) =>
+                      //   setbookingForm({
+                      //     ...bookinForm,
+                      //     childCount: e.target.value,
+                      //   })
+                      // }
                     />
-                  </div>
-                  <div className="flex bg-white px-2 py-1 gap-2">
-                    <label className="items-center flex">
-                      Adults:
-                      <input
-                        className="w-full p-1 focus:outline-none font-bold"
-                        type="number"
-                        min={1}
-                        max={20}
-                        value={data?.data?.adultCount}
-                        onChange={(e) =>
-                          setbookingForm({
-                            ...bookinForm,
-                            adultCount: e.target.value,
-                          })
-                        }
-                      />
-                    </label>
-                    <label className="items-center flex">
-                      Children:
-                      <input
-                        className="w-full p-1 focus:outline-none font-bold"
-                        type="number"
-                        min={0}
-                        max={20}
-                        value={data?.data?.childCount}
-                        onChange={(e) =>
-                          setbookingForm({
-                            ...bookinForm,
-                            childCount: e.target.value,
-                          })
-                        }
-                      />
-                    </label>
-                  </div>
-                  {currentUser?.data?.user ? (
-                    <button onClick={onHandleBookNow} className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl">
+                  </label>
+                </div>
+                {currentUser?.data?.user ? (
+                  <Link
+                    className="flex justify-center"
+                    to={`/booking_form/${currentUser?.data?.user?._id}`}
+                  >
+                    <button
+                      onClick={onHandleBookNow}
+                      className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl"
+                    >
                       Book Now
                     </button>
-                  ) : (
-                    <Link className="flex justify-center" to={"/signin"}>
+                  </Link>
+                ) : (
+                  <Link className="flex justify-center" to={"/signin"}>
                     <button className="bg-blue-600 text-white h-full p-2 font-bold hover:bg-blue-500 text-xl">
                       Sign in to Book
                     </button>
-                    </Link>
-                  )}
-                </div>
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
         </div>

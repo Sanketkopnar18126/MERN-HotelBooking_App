@@ -3,7 +3,10 @@ import { apiError } from "../utils/apiError.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { asynchHandler } from "../utils/asynchHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import Stripe, { Stripe } from "stripe";
 
+const stripe = new Stripe(process.env.API_SECRETE_KEY);
+console.log("Stripe Payment", stripe);
 //  create hotel form
 const createHotelForm = asynchHandler(async (req, res) => {
   const {
@@ -179,9 +182,55 @@ const getParticularHotel = asynchHandler(async (req, res) => {
   }
 });
 
+// Stripe payment
+
+const stripePayment = asynchHandler(async (req, res) => {
+  /*
+   **
+   * get user id
+   * get by userId get That particular hotel
+   *  get pricePerNight
+   *  calculate total cost
+   *
+   */
+
+  const { numberOfNights } = req.body;
+  const hotelId = req.params.id;
+
+  const hotel = await Hotel.findById(hotelId);
+  console.log("Hotel", hotel);
+  if (!hotel) {
+    throw new apiError(404, "Hotel Does Not Exist");
+  }
+  const totalCost = hotel?.pricePerNight * numberOfNights;
+
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: totalCost,
+    currency: "gbp",
+    metadata: {
+      hotelId,
+      userId: req?.user?._id,
+    },
+  });
+
+  if (!paymentIntent.client_secret) {
+    throw new apiError(500, "Eroor at stripe controller");
+  }
+
+  const sendData = {
+    paymentIntentId: paymentIntent.id,
+    clientSecret: paymentIntent.client_secret.toString(),
+    totalCost,
+  };
+  return res
+    .status(200)
+    .json(new apiResponse(200, sendData, "Successfully payment Done"));
+});
+
 export {
   createHotelForm,
   updateHotelForm,
   searchHotelByUser,
   getParticularHotel,
+  stripePayment,
 };
